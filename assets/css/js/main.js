@@ -399,3 +399,17 @@ function closeAuthModal() {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', initApp);
+
+// ✅ Fix: Navigation Toggle Functionality
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.getElementById("menuToggle");
+    const menuDropdown = document.getElementById("menuDropdown");
+
+    if (menuToggle && menuDropdown) {
+        menuToggle.addEventListener("click", function () {
+            menuDropdown.classList.toggle("open");
+        });
+    } else {
+        console.error("Navigation menu elements not found!");
+    }
+});
