@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Hub</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-brand">
+          <a href="#" class="logo">Knowledge Hub</a>
+        </div>
+        <div class="navbar-menu">
+          <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div class="menu-dropdown" id="menuDropdown">
+            <a href="#" class="menu-item active" data-page="home">Home</a>
+            <a href="#" class="menu-item" data-page="blogs">Blogs</a>
+            <a href="#" class="menu-item" data-page="videos">Videos</a>
+            <a href="#" class="menu-item" data-page="contact">Contact</a>
+            <a href="#" class="menu-item" data-page="terms">Terms & Policies</a>
+            <div id="authLinks">
+              <a href="#" class="menu-item" id="signInLink">Sign In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content Container -->
+    <div id="pageContent">
+      <!-- Home Page (Default) -->
+      <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+          <div class="container">
+            <h1>Welcome to Knowledge Hub</h1>
+            <p>Your source for educational blogs and videos</p>
+            <div class="hero-buttons">
+              <a href="#" class="btn btn-primary" data-page="blogs">Explore Blogs</a>
+              <a href="#" class="btn btn-secondary" data-page="videos">Watch Videos</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats">
+          <div class="container">
+            <h2 class="section-title">Our Impact</h2>
+            <div class="stats-container">
+              <div class="stat-card">
+                <div class="stat-icon">📚</div>
+                <h3>50+</h3>
+                <p>Educational Blogs</p>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">🎬</div>
+                <h3>30+</h3>
+                <p>Tutorial Videos</p>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">👨‍💻</div>
+                <h3>1000+</h3>
+                <p>Active Users</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Featured Content -->
+        <section class="featured">
+          <div class="container">
+            <h2 class="section-title">Featured Content</h2>
+            <div class="featured-content">
+              <div id="featuredBlogs" class="featured-blogs"></div>
+              <div id="featuredVideos" class="featured-videos"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Blogs Page -->
+      <div id="blogs" class="page">
+        <div class="container">
+          <h1 class="page-title">Blogs</h1>
+          <div id="blogsList" class="blogs-grid"></div>
+        </div>
+      </div>
+
+      <!-- Videos Page -->
+      <div id="videos" class="page">
+        <div class="container">
+          <h1 class="page-title">Videos</h1>
+          <div id="videosList" class="videos-grid"></div>
+        </div>
+      </div>
+
+      <!-- Contact Page -->
+      <div id="contact" class="page">
+        <div class="container">
+          <h1 class="page-title">Contact Us</h1>
+          <div class="contact-form-container">
+            <form id="contactForm" class="contact-form">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terms & Policies Page -->
+      <div id="terms" class="page">
+        <div class="container">
+          <h1 class="page-title">Terms & Policies</h1>
+          <div class="terms-content">
+            <h2>Terms of Service</h2>
+            <p>By accessing this website, you agree to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.</p>
+            
+            <h2>Privacy Policy</h2>
+            <p>Your privacy is important to us. It is Knowledge Hub's policy to respect your privacy regarding any information we may collect from you across our website.</p>
+            
+            <h2>Content Usage</h2>
+            <p>All content provided on this website is for informational purposes only. The owners of this website make no representations as to the accuracy or completeness of any information on this site.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Dashboard -->
+      <div id="admin" class="page">
+        <div class="container">
+          <h1 class="page-title">Admin Dashboard</h1>
+          
+          <!-- Admin Tabs -->
+          <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="blogTab">Manage Blogs</button>
+            <button class="tab-btn" data-tab="videoTab">Manage Videos</button>
+          </div>
+          
+          <!-- Blog Management Tab -->
+          <div id="blogTab" class="tab-content active">
+            <form id="blogForm" class="admin-form">
+              <h2>Add New Blog</h2>
+              <div class="form-group">
+                <label for="blogTitle">Title</label>
+                <input type="text" id="blogTitle" name="title" required>
+              </div>
+              <div class="form-group">
+                <label for="blogCategory">Category</label>
+                <input type="text" id="blogCategory" name="category" required>
+              </div>
+              <div class="form-group">
+                <label for="blogContent">Content</label>
+                <textarea id="blogContent" name="content" rows="8" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="blogImageUrl">Image URL</label>
+                <input type="text" id="blogImageUrl" name="imageUrl">
+              </div>
+              <button type="submit" class="btn btn-primary">Add Blog</button>
+            </form>
+            
+            <div class="admin-list">
+              <h2>Existing Blogs</h2>
+              <div id="adminBlogsList" class="admin-items"></div>
+            </div>
+          </div>
+          
+          <!-- Video Management Tab -->
+          <div id="videoTab" class="tab-content">
+            <form id="videoForm" class="admin-form">
+              <h2>Add New Video</h2>
+              <div class="form-group">
+                <label for="videoTitle">Title</label>
+                <input type="text" id="videoTitle" name="title" required>
+              </div>
+              <div class="form-group">
+                <label for="videoCategory">Category</label>
+                <input type="text" id="videoCategory" name="category" required>
+              </div>
+              <div class="form-group">
+                <label for="videoDescription">Description</label>
+                <textarea id="videoDescription" name="description" rows="4" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="videoUrl">Video URL (YouTube embed)</label>
+                <input type="text" id="videoUrl" name="videoUrl" required>
+              </div>
+              <div class="form-group">
+                <label for="thumbnailUrl">Thumbnail URL</label>
+                <input type="text" id="thumbnailUrl" name="thumbnailUrl">
+              </div>
+              <div class="form-group">
+                <label for="duration">Duration (minutes)</label>
+                <input type="number" id="duration" name="duration" min="1" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Video</button>
+            </form>
+            
+            <div class="admin-list">
+              <h2>Existing Videos</h2>
+              <div id="adminVideosList" class="admin-items"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Authentication -->
+    <div id="authModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="signInForm" class="auth-form">
+          <h2>Sign In</h2>
+          <div class="form-group">
+            <label for="signInEmail">Email</label>
+            <input type="email" id="signInEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="signInPassword">Password</label>
+            <input type="password" id="signInPassword" required>
+          </div>
+          <button type="button" id="signInButton" class="btn btn-primary">Sign In</button>
+          <p class="auth-toggle">Don't have an account? <a href="#" id="switchToSignUp">Sign Up</a></p>
+        </div>
+        
+        <div id="signUpForm" class="auth-form hidden">
+          <h2>Sign Up</h2>
+          <div class="form-group">
+            <label for="signUpEmail">Email</label>
+            <input type="email" id="signUpEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="signUpPassword">Password</label>
+            <input type="password" id="signUpPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="signUpConfirmPassword">Confirm Password</label>
+            <input type="password" id="signUpConfirmPassword" required>
+          </div>
+          <button type="button" id="signUpButton" class="btn btn-primary">Sign Up</button>
+          <p class="auth-toggle">Already have an account? <a href="#" id="switchToSignIn">Sign In</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast for notifications -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Video Player Modal -->
+    <div id="videoPlayerModal" class="modal">
+      <div class="modal-content video-modal">
+        <span class="close">&times;</span>
+        <div id="videoPlayerContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h2>Knowledge Hub</h2>
+          <p>Your source for educational content</p>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#" data-page="home">Home</a></li>
+            <li><a href="#" data-page="blogs">Blogs</a></li>
+            <li><a href="#" data-page="videos">Videos</a></li>
+            <li><a href="#" data-page="contact">Contact</a></li>
+            <li><a href="#" data-page="terms">Terms & Policies</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h3>Contact Us</h3>
+          <p>Email: info@knowledgehub.com</p>
+          <p>Phone: (123) 456-7890</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Knowledge Hub. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript Files -->
+  <script src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
